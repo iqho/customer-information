@@ -30,8 +30,13 @@
                 </div>
 
                 <div class="card-body">
-{{--
-                    <form @submit.prevent="onSubmitForm"> --}}
+                    @if (session('status'))
+                        <div class="alert {{ session('alertClass') }} text-center" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    {{-- <form @submit="onSubmitForm"> --}}
                     <form action="{{ route('customers.store') }}" method="post">
                         @csrf
                         <div class="table-responsive">
@@ -50,14 +55,14 @@
                                 <tbody>
                                     <tr v-if="items.length > 0" v-for="(item, index) in items" :key="index">
                                         <td>@{{index + 1}}</td>
-                                        <td><input type="number" min="1" v-model="item.code" name="codes[]" class="form-control" value="12291" required/>
+                                        <td><input type="number" min="1" v-model="item.code" name="codes[]" class="form-control" readonly >
                                         </td>
                                         <td><input type="text" v-model="item.name" name="names[]" class="form-control"
                                                 placeholder="Full Name"  required/></td>
                                         <td><input type="number" v-model="item.age" name="ages[]" min="1" class="form-control"
                                                 placeholder="Age" required /></td>
                                         <td>
-                                            <select class="form-select" v-model="item.location" name="locations[]" required>
+                                            <select class="form-select" v-model="item.area_id" @change="onChange($event)" name="area_ids[]" required>
                                                 <option value="" selected>Select Location</option>
                                                 @foreach ($locations as $location)
                                                 <option value="{{ $location->id }}">{{ $location->name }}</option>
@@ -91,39 +96,58 @@
     createApp({
         data(){
             return {
-            items: [
-                {
-                code: '',
-                name: '',
-                age: '',
-                location: ''
-                }
-            ]
+                items: [{
+                    code: '',
+                    name: '',
+                    age: '',
+                    area_id: ''
+                }],
             }
         },
+
         watch: {
             'items': {
             handler (newValue, oldValue) {
                 newValue.forEach((item) => {
-                item.total = item.quantity * item.amount
+
+                    const url = "{{ route('customers.checkCode') }}";
+
+                    axios.post( url, { id: item.area_id })
+                    .then(response => {
+
+                        item.code = response.data.success;
+
+                    });
+
                 })
             },
             deep: true
             }
         },
+
         methods: {
             AddItem(){
                 this.items.push({
-                    code: '',
+                    code: [],
                     name: '',
                     age: '',
-                    location: ''
+                    area_id: ''
                 })
             },
             removeItem(){
                 this.items.splice(this.items, 1)
             },
 
+            // async onSubmitForm(){
+
+            //     const url = "{{ route('customers.store') }}";
+
+            //    await axios.post( url, { code: this.items.code, name: this.items.name, area_id: this.items.area_id, age:this.items.age })
+            //     .then(response => {
+            //         console.log(response.data.success);
+            //     });
+
+            // }
 
         }
 }).mount('#app')

@@ -34,6 +34,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://getbootstrap.com/docs/5.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Vuejs CDN -->
@@ -41,6 +42,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
 
     @stack('script')
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("div.alert").delay(5000).slideUp(300);
+        });
+    </script>
 
 </body>
 

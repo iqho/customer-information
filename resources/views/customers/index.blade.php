@@ -6,11 +6,21 @@
 <div class="row border border-gray">
 
     @if (session('status'))
-    <div class="row">
+    <div class="row mx-auto">
         <div class="col-12 alert {{ session('alertClass') }} text-center" role="alert">
             {{ session('status') }}
         </div>
     </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <div class="table-responsive mt-3">
