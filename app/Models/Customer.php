@@ -11,6 +11,13 @@ class Customer extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public $fillable = [
+        'area_id',
+        'code',
+        'name',
+        'age',
+    ];
+
     public function areas()
     {
         return $this->hasOne(Area::class);

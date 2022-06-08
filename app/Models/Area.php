@@ -10,6 +10,11 @@ class Area extends Model
 {
     use HasFactory, softDeletes;
 
+    public $fillable = [
+        'name',
+        'code',
+    ];
+
     public function customers()
     {
         return $this->belongsTo(Customer::class);

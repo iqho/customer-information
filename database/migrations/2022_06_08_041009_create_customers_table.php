@@ -13,9 +13,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('area_id');
 
-            $table->bigInteger('code');
+            $table->bigInteger('code')->unique();
             $table->string('name', 100);
-            $table->integer('age', 3);
+            $table->integer('age');
             $table->timestamps();
             $table->softDeletes();
 
