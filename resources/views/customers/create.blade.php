@@ -21,7 +21,7 @@
 @endpush
 
 @section('content')
-<div class="container border border-gray" id="app" v-cloak>
+<div class="container border border-gray p-2" id="app" v-cloak>
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
@@ -36,9 +36,10 @@
                         </div>
                     @endif
 
-                    {{-- <form @submit="onSubmitForm"> --}}
+                    <!-- <form @submit.prevent="onSubmitForm"> -->
                     <form action="{{ route('customers.store') }}" method="post">
                         @csrf
+                        @method('POST')
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -108,15 +109,13 @@
         watch: {
             'items': {
             handler (newValue, oldValue) {
-                newValue.forEach((item) => {
+                newValue.forEach((item, i) => {
 
                     const url = "{{ route('customers.checkCode') }}";
 
                     axios.post( url, { id: item.area_id })
                     .then(response => {
-
-                        item.code = response.data.success;
-
+                        item.code = response.data.success+i;
                     });
 
                 })
@@ -128,7 +127,7 @@
         methods: {
             AddItem(){
                 this.items.push({
-                    code: [],
+                    code: '',
                     name: '',
                     age: '',
                     area_id: ''
@@ -138,14 +137,16 @@
                 this.items.splice(this.items, 1)
             },
 
-            // async onSubmitForm(){
+            // onSubmitForm(){
 
             //     const url = "{{ route('customers.store') }}";
 
-            //    await axios.post( url, { code: this.items.code, name: this.items.name, area_id: this.items.area_id, age:this.items.age })
-            //     .then(response => {
-            //         console.log(response.data.success);
-            //     });
+            //     const data = JSON.stringify({items:items})
+            //     const config = {
+            //         headers: {'Content-Type': 'application/json'}
+            //     }
+
+            //     axios.post(url, data, config);
 
             // }
 

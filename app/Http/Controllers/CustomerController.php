@@ -27,35 +27,34 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
 
-                try {
-                    $codes = $request->codes;
-                    $names = $request->names;
-                    $ages = $request->ages;
-                    $area_ids = $request->area_ids;
+        try {
+            $codes = $request->codes;
+            $names = $request->names;
+            $ages = $request->ages;
+            $area_ids = $request->area_ids;
 
-                    $customers = [];
+            $customers = [];
 
-                    foreach ($codes as $i => $code) {
+            foreach ($codes as $i => $code) {
 
-                        $customers[] = [
-                            'area_id' => $area_ids[$i],
-                            'code' => $code,
-                            'name' => $names[$i],
-                            'age' => $ages[$i],
-                            "created_at" => Carbon::now(),
-                            "updated_at" => Carbon::now(),
-                        ];
-                    }
+                $customers[] = [
+                    'area_id' => $area_ids[$i],
+                    'code' => $code,
+                    'name' => $names[$i],
+                    'age' => $ages[$i],
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now(),
+                ];
+            }
 
-                    if ($customers[$i]) {
-                        $allCustomers = new Customer;
-                        $allCustomers->insert($customers);
-                    }
+            if ($customers[$i]) {
+                $allCustomers = new Customer;
+                $allCustomers->insert($customers);
+            }
 
-                } catch (QueryException $e) {
-                    return redirect()->back()->with('status', 'Customer not Added'.$e->getMessage())->with('alertClass', 'alert-danger');
-                }
-
+        } catch (QueryException $e) {
+            return redirect()->back()->with('status', 'Customer not Added'.$e->getMessage())->with('alertClass', 'alert-danger');
+        }
 
         return redirect()->route('customers')->with('status', 'Customer Added Successfully.')->with('alertClass', 'alert-success');
 
