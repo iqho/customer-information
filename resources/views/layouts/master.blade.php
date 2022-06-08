@@ -35,7 +35,11 @@
     </div>
 
     <script src="https://getbootstrap.com/docs/5.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/vue@3"></script>
+
+    <!-- Vuejs CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+
     @stack('script')
 
 </body>

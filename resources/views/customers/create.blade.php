@@ -3,17 +3,20 @@
 @section('title', 'Add New Customer')
 @push('styles')
 <style>
-table, tr,td {
-  border: 1px solid rgb(170, 170, 170);
-  text-align: center;
-  vertical-align: middle;
-}
-button.newItem {
-  padding: 5px;
-  margin: 14px 0 0 0;
-  font-weight: bold;
-  font-size: 16px;
-}
+    table,
+    tr,
+    td {
+        border: 1px solid rgb(170, 170, 170);
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    button.newItem {
+        padding: 5px;
+        margin: 14px 0 0 0;
+        font-weight: bold;
+        font-size: 16px;
+    }
 </style>
 @endpush
 
@@ -27,8 +30,9 @@ button.newItem {
                 </div>
 
                 <div class="card-body">
-
-                    <form @submit.prevent="onSubmitForm">
+{{--
+                    <form @submit.prevent="onSubmitForm"> --}}
+                    <form action="{{ route('customers.store') }}" method="post">
                         @csrf
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -39,24 +43,34 @@ button.newItem {
                                         <th style="width:35%">Full Name</th>
                                         <th style="width:10%">Age</th>
                                         <th style="width:20%">Location</th>
-                                        <th style="width:10%"><button class="btn btn-success" @click="AddItem"><i class="fa-solid fa-plus fa-lg"></i></button></th>
+                                        <th style="width:10%"><a class="btn btn-success" @click="AddItem"><i
+                                                    class="fa-solid fa-plus fa-lg"></i></a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="items.length > 0" v-for="(item, index) in items" :key="index">
                                         <td>@{{index + 1}}</td>
-                                        <td><input type="text" v-model="item.code" class="form-control" value="12291"/></td>
-                                        <td><input type="text" v-model="item.name" class="form-control" placeholder="Full Name"/></td>
-                                        <td><input type="text" v-model="item.age" class="form-control" placeholder="Age"/></td>
+                                        <td><input type="number" min="1" v-model="item.code" name="codes[]" class="form-control" value="12291" required/>
+                                        </td>
+                                        <td><input type="text" v-model="item.name" name="names[]" class="form-control"
+                                                placeholder="Full Name"  required/></td>
+                                        <td><input type="number" v-model="item.age" name="ages[]" min="1" class="form-control"
+                                                placeholder="Age" required /></td>
                                         <td>
-                                            <select class="form-select" v-model="item.location">
+                                            <select class="form-select" v-model="item.location" name="locations[]" required>
                                                 <option value="" selected>Select Location</option>
                                                 @foreach ($locations as $location)
                                                 <option value="{{ $location->id }}">{{ $location->name }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td><button class="btn btn-danger" @click="removeItem"><i class="fa-solid fa-minus"></i></button></td>
+                                        <td><a class="btn btn-danger" @click="removeItem"><i
+                                                    class="fa-solid fa-minus"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <button type="submit" class="btn btn-primary btn-lg">Add Customers</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -99,23 +113,17 @@ button.newItem {
         },
         methods: {
             AddItem(){
-            this.items.push({
-                code: '',
-                name: '',
-                age: '',
-                location: ''
-            })
+                this.items.push({
+                    code: '',
+                    name: '',
+                    age: '',
+                    location: ''
+                })
             },
             removeItem(){
-            this.items.splice(this.items, 1)
+                this.items.splice(this.items, 1)
             },
 
-            onSubmitForm(){
-                if(this.items.code === '' || this.items.name === '' || this.items.age === '' || this.items.location === ''){
-                    alert('Email or Password can\'t be Empty');
-                    return;
-                }
-            },
 
         }
 }).mount('#app')

@@ -18,8 +18,8 @@ class Customer extends Model
         'age',
     ];
 
-    public function areas()
+    public function area()
     {
-        return $this->hasOne(Area::class);
+        return $this->belongsTo(Area::class);
     }
 }
