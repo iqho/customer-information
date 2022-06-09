@@ -41,26 +41,17 @@
                             }}</div>
                     </div>
 
-                    {{-- @if (session('status'))
+                    @if (session('status'))
                         <div class="alert {{ session('alertClass') }} text-center" role="alert">
                             {{ session('status') }}
                         </div>
-                    @endif --}}
-
-
-                    {{-- <div v-if="errors" class="alert alert-danger">
-                        <div v-for="(v, k) in errors" :key="k">
-                          <p v-for="error in v" :key="error" class="text-sm">
-                            @{{ error }}
-                          </p>
-                        </div> 
-                      </div>--}}
+                    @endif
 
                     {{-- <div class="alert alert-danger" v-for="(error, i) in errors">
                         @{{ error }}
                     </div> --}}
 
-                    <form @submit.prevent="onSubmitForm">
+                    <form @submit.prevent="onSubmitForm" method="post">
                         @csrf
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -126,7 +117,7 @@
                     area_id: ''
                 }],
                 success: [],
-                errors: '',
+                errors: [],
             }
         },
 
@@ -164,7 +155,7 @@
             async onSubmitForm(){
 
                 const url = "{{ route('customers.store') }}";
-                const data = JSON.stringify(this.items);
+                const data = JSON.stringify({data:this.items});
                 const config = {
                     headers: {'Content-Type': 'application/json'}
                 }
@@ -172,25 +163,23 @@
                 await axios.post(url, data, config)
                 .then((response) => {
 
+                    console.log(response.data.success);
 
-                  //  console.log(response.data.success);
-
-                    if(response.data.response_code == 0){
-                        this.errors = response.data.errors;
-                        console.log(response.data.errors);
-                    }else{
-                        this.success = response.data.success;
-                        console.log(response.data.success);
-                        // setTimeout(() => window.location.reload(), 3000);
-                    }
+                    // if(response.data.response_code == 0){
+                    //     this.errors = response.data.errors;
+                    // }else{
+                    //     this.success = response.data.success;
+                    //     console.log(response.data.success);
+                    //     // setTimeout(() => window.location.reload(), 3000);
+                    // }
                 })
-                .catch((error) => {
-                    if (error.response.status == 422){
-                      //  this.errors = error.response.data.errors;
-                        // console.log(error.response.data.errors.name[0]);
-                      //this.errors = error.data.errors;
-                        // alert()
-                    }
+                .catch(function (error) {
+                    //if (error.response.status == 422){
+                        this.errors = error.response.data.errors;
+                        console.log(error.response.data.errors);
+
+                        //alert()
+                    //}
                 });
 
             }

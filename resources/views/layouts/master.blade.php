@@ -56,7 +56,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("div.alert").delay(5000).slideUp(300);
+           // $("div.alert").delay(5000).slideUp(300);
         });
     </script>
 
