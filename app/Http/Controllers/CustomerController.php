@@ -24,39 +24,19 @@ class CustomerController extends Controller
         return view('customers.create', compact('locations'));
     }
 
-    public function store(Request $request)
+    public function store(CustomerStoreRequest $request)
     {
+        $validator = Validator::make($input, $rules);
 
-        try {
-            $codes = $request->codes;
-            $names = $request->names;
-            $ages = $request->ages;
-            $area_ids = $request->area_ids;
+        if ( $validator->fails() ){
 
-            $customers = [];
+            return response()->json(['success'=> $validator->messages()]);
 
-            foreach ($codes as $i => $code) {
-
-                $customers[] = [
-                    'area_id' => $area_ids[$i],
-                    'code' => $code,
-                    'name' => $names[$i],
-                    'age' => $ages[$i],
-                    "created_at" => Carbon::now(),
-                    "updated_at" => Carbon::now(),
-                ];
-            }
-
-            if ($customers[$i]) {
-                $allCustomers = new Customer;
-                $allCustomers->insert($customers);
-            }
-
-        } catch (QueryException $e) {
-            return redirect()->back()->with('status', 'Customer not Added'.$e->getMessage())->with('alertClass', 'alert-danger');
         }
 
-        return redirect()->route('customers')->with('status', 'Customer Added Successfully.')->with('alertClass', 'alert-success');
+        Customer::insert($request->data);
+
+        return response()->json(['success'=> 'Customer Added SuccessFully']);
 
     }
 

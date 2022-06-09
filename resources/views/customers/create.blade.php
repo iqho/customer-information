@@ -30,15 +30,20 @@
                 </div>
 
                 <div class="card-body">
+
+                    <div class="row" v-cloak>
+                        <div v-if="message.length" class="alert alert-success text-center p-2" role="alert">@{{ message
+                            }}</div>
+                    </div>
+                    @{{ alertType }}
                     @if (session('status'))
                         <div class="alert {{ session('alertClass') }} text-center" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
 
-                    <form action="{{ route('customers.store') }}" method="post">
+                    <form @submit.prevent="onSubmitForm" method="post">
                         @csrf
-                        @method('POST')
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -58,7 +63,7 @@
                                         <td><input type="number" min="1" v-model="item.code" name="codes[]" class="form-control" readonly >
                                         </td>
                                         <td><input type="text" v-model="item.name" name="names[]" class="form-control"
-                                                placeholder="Full Name"  required/></td>
+                                                placeholder="Full Name" /></td>
                                         <td><input type="number" v-model="item.age" name="ages[]" min="1" class="form-control"
                                                 placeholder="Age" required /></td>
                                         <td>
@@ -102,6 +107,8 @@
                     age: '',
                     area_id: ''
                 }],
+                message: '',
+                alertType: '',
             }
         },
 
@@ -114,7 +121,7 @@
 
                     axios.post( url, { id: item.area_id })
                     .then(response => {
-                        item.code = response.data.success+i;
+                        item.code = Number(response.data.success)+i;
                     });
 
                 })
@@ -135,6 +142,26 @@
             removeItem(){
                 this.items.splice(this.items, 1)
             },
+
+            async onSubmitForm(){
+
+                const url = "{{ route('customers.store') }}";
+                const data = JSON.stringify({data:this.items});
+                const config = {
+                    headers: {'Content-Type': 'application/json'}
+                }
+
+                await axios.post(url, data, config)
+                .then((response) => {
+                    this.message = response.data.success;
+                    setTimeout(() => window.location.reload(), 3000);
+                    console.log(response.data.success);
+                })
+                .catch(function (error) {
+                   // console.log(error);
+                });
+
+            }
 
         }
 }).mount('#app')
