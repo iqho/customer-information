@@ -36,7 +36,6 @@
                         </div>
                     @endif
 
-                    <!-- <form @submit.prevent="onSubmitForm"> -->
                     <form action="{{ route('customers.store') }}" method="post">
                         @csrf
                         @method('POST')
@@ -136,19 +135,6 @@
             removeItem(){
                 this.items.splice(this.items, 1)
             },
-
-            // onSubmitForm(){
-
-            //     const url = "{{ route('customers.store') }}";
-
-            //     const data = JSON.stringify({items:items})
-            //     const config = {
-            //         headers: {'Content-Type': 'application/json'}
-            //     }
-
-            //     axios.post(url, data, config);
-
-            // }
 
         }
 }).mount('#app')

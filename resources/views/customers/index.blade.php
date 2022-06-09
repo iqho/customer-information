@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', '')
+@section('title')
 
 @section('content')
 <div class="row border border-gray">
@@ -13,20 +13,13 @@
     </div>
     @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="table-responsive mt-3">
         <div class="row">
-            <div class="col-md-12 text-center border-bottom border-gray mb-3">
+            <div class="col-md-10 text-center border-bottom border-gray mb-3">
                 <h2>List of All Customers</h2>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-success floar-end" href="{{ route('customers.create') }}">Add New Customer</a>
             </div>
         </div>
         <table class="table table-bordered text-center" id="datatable">

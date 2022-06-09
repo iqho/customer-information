@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title> @yield('title', 'Welcome to Test Project') </title>
+    <title> @yield('title', 'Welcome to Win Win Service Privider') </title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" />
@@ -39,6 +39,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script src="https://getbootstrap.com/docs/5.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- DataTables CDN -->
@@ -60,5 +61,4 @@
     </script>
 
 </body>
-
 </html>
