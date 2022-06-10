@@ -25,17 +25,16 @@
 
                 <div class="card-body">
 
-                    <div v-if="success.length" class="alert alert-success alert-dismissible fade show text-center p-2 m-0 mb-2" role="alert">
-                        @{{ success }}
-                        <button type="button" class="btn-close p-1 mt-1 m-0" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="row" v-cloak>
+                        <div v-if="success.length" class="alert alert-success text-center p-2" role="alert">@{{ success
+                            }}</div>
                     </div>
 
-                    <div v-for="(errors, field) in allerrors" class="row alert alert-danger alert-dismissible fade show mb-1 text-center m-0 p-0" role="alert">
-                        <div v-for="(error, i) in errors" class="p-2 m-0">
-                            @{{ error }}
+                        <div v-for="(errors, field) in allerror" class="mb-1">
+                            <div v-for="(error, i) in errors" class="alert alert-danger p-2 m-0">
+                                @{{ error }}
+                            </div>
                         </div>
-                        <button type="button" class="btn-close p-1 mt-1 m-0" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
 
                     <form @submit.prevent="onSubmitForm" class="mt-2">
                         @csrf
@@ -59,17 +58,17 @@
                                 <tbody>
                                     <tr v-if="customers.length > 0" v-for="(customer, index) in customers" :key="index">
                                         <td>@{{index + 1}}</td>
-                                        <td>
-                                            <input type="number" min="1" v-model="customer.code" class="form-control" :class="hasError[index]" readonly>
+                                        <td><input type="number" min="1" v-model="customer.code" name="codes[]"
+                                                class="form-control" readonly>
+
                                         </td>
+                                        <td><input type="text" v-model="customer.name" name="names[]" class="form-control"
+                                                placeholder="Full Name" /></td>
+                                        <td><input type="number" v-model="customer.age" name="ages[]" min="1"
+                                                class="form-control" placeholder="Age" /></td>
                                         <td>
-                                            <input type="text" v-on:keyup="removeError(index)" :class="hasError[index]" v-model="customer.name" class="form-control" placeholder="Full Name" />
-                                        </td>
-                                        <td>
-                                            <input type="number" v-on:change="removeError(index)" v-model="customer.age" min="1" class="form-control" :class="hasError[index]" placeholder="Age" />
-                                        </td>
-                                        <td>
-                                            <select class="form-select" v-model="customer.area_id" :class="hasError[index]" v-on:change="removeError(index)">
+                                            <select class="form-select" v-model="customer.area_id" name="area_ids[]"
+                                                required>
                                                 <option value="" selected>Select Location</option>
                                                 @foreach ($locations as $location)
                                                 <option value="{{ $location->id }}">{{ $location->name }}</option>
@@ -88,7 +87,7 @@
                             </table>
                         </div>
                     </form>
-
+                
                 </div>
             </div>
         </div>
@@ -107,11 +106,10 @@
                     code: '',
                     name: '',
                     age: '',
-                    area_id: '',
+                    area_id: ''
                 }],
                 success: '',
-                allerrors: [],
-                hasError: [],
+                allerror: ''
             }
         },
 
@@ -146,19 +144,7 @@
                 this.customers.splice(index, 1)
             },
 
-           removeError(index){
-                 this.hasError[index] = '';
-            },
-
             async onSubmitForm(){
-
-                let thisV = this ;
-
-                this.customers.forEach(function(e, i) {
-                  if(e.code == '' || e.name == '' || e.age == '' || e.area_id == ''){
-                    thisV.hasError[i] = 'border border-danger border-2';
-                  }
-              });
 
                 const url = "{{ route('customers.store') }}";
                 const customers = JSON.stringify({customers:this.customers});
@@ -167,30 +153,11 @@
                 }
 
                 await axios.post(url, customers, config)
-                .then((response) => {
-                    this.allerrors = '';
+                .then((response) => {                   
                     this.success = response.data.success;
-
-                    setTimeout(()=>{
-                        this.success = '';
-                    }, 5000);
-
-                    this.customers.forEach(function(e) {
-                        e.code = '';
-                        e.name = '';
-                        e.age = '';
-                        e.area_id = '';
-                        });
-
                     //setTimeout(() => window.location.reload(), 3000);
                 })
-                 .catch(error => {
-                    this.allerrors = error.response.data.errors;
-
-                    setTimeout(()=>{
-                        this.allerrors = '';
-                    }, 10000);
-                });
+                .catch(error => this.allerror = error.response.data.errors)
             }
 
         }

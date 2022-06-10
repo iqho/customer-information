@@ -21,4 +21,22 @@ class CustomerStoreRequest extends FormRequest
             'customers.*.area_id' => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'customers.*.code.required' => 'Customer Code is Required !',
+            'customers.*.code.unique' => 'Already Exist ! Customer Code Must be Unique !',
+
+            'customers.*.name.required' => 'Customer Name is Required !',
+            'customers.*.name.max' => 'Customer Name cannot be more than 255 characters !',
+
+            'customers.*.age.required' => 'Customer Age is Required !',
+
+            'customers.*.area_id.required' => 'Customer Location is Required !',
+
+        ];
+    }
+
+
 }
