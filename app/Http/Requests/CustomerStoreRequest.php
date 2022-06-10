@@ -15,10 +15,10 @@ class CustomerStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:customers,code',
-            'name' => 'required|max:255',
-            'age' => 'required',
-            'area_id' => 'required',
+            'customers.*.code' => 'required|unique:customers,code',
+            'customers.*.name' => 'required|max:255',
+            'customers.*.age' => 'required',
+            'customers.*.area_id' => 'required',
         ];
     }
 }

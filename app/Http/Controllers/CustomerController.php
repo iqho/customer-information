@@ -14,53 +14,44 @@ class CustomerController extends Controller
 {
     private $_getColumns = ['id', 'area_id', 'code', 'name', 'age', 'created_at'];
 
-    public function index(){
+    public function index()
+    {
         $customers = Customer::get($this->_getColumns);
         return view('customers.index', compact('customers'));
     }
 
-    public function create(){
+    public function create()
+    {
         $locations = Area::get(['id', 'code', 'name']);
         return view('customers.create', compact('locations'));
     }
 
     public function store(CustomerStoreRequest $request)
     {
-        $validator = Validator::make($input, $rules);
 
-        if ( $validator->fails() ){
+        Customer::insert($request->customers);
 
-            return response()->json(['success'=> $validator->messages()]);
-
-        }
-
-        Customer::insert($request->data);
-
-        return response()->json(['success'=> 'Customer Added SuccessFully']);
-
+        return response()->json(['success' => 'Customer Added SuccessFully']);
     }
 
-    public function checkCode(Request $request){
+    public function checkCode(Request $request)
+    {
 
         try {
             $lastCode = Customer::where('area_id', $request->id)->orderBy('code', 'DESC')->first();
 
-            if($lastCode !== null){
+            if ($lastCode !== null) {
                 $newCode = $lastCode->code + 1;
-            }
-            else{
+            } else {
                 $code = Area::where('id', $request->id)->pluck('code');
-                $newCode = $code[0].'0001';
+                $newCode = $code[0] . '0001';
             }
 
-            return response()->json(['success'=> $newCode]);
+            return response()->json(['success' => $newCode]);
+        } catch (QueryException $e) {
 
-        } catch(QueryException $e){
-
-            return response()->json(['success'=> $e->getMessage()]);
-
+            return response()->json(['success' => $e->getMessage()]);
         }
     }
 
 }
-
