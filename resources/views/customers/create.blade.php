@@ -60,16 +60,16 @@
                                     <tr v-if="customers.length > 0" v-for="(customer, index) in customers" :key="index">
                                         <td>@{{index + 1}}</td>
                                         <td>
-                                            <input type="number" min="1" v-model="customer.code" class="form-control" :class="hasError[index]" readonly>
+                                            <input type="number" min="1" v-model="customer.code" class="form-control" :class="hasError[index]" required readonly>
                                         </td>
                                         <td>
-                                            <input type="text" v-on:keyup="removeError(index)" :class="hasError[index]" v-model="customer.name" class="form-control" placeholder="Full Name" />
+                                            <input type="text" v-on:keyup="removeError(index)" :class="hasError[index]" v-model="customer.name" class="form-control" placeholder="Full Name" required autofocus />
                                         </td>
                                         <td>
-                                            <input type="number" v-on:change="removeError(index)" v-model="customer.age" min="1" class="form-control" :class="hasError[index]" placeholder="Age" />
+                                            <input type="number" v-on:change="removeError(index)" v-model="customer.age" min="1" class="form-control" :class="hasError[index]" placeholder="Age" required />
                                         </td>
                                         <td>
-                                            <select class="form-select" v-model="customer.area_id" :class="hasError[index]" v-on:change="removeError(index)">
+                                            <select class="form-select" v-model="customer.area_id" :class="hasError[index]" v-on:change="removeError(index)" required>
                                                 <option value="" selected>Select Location</option>
                                                 @foreach ($locations as $location)
                                                 <option value="{{ $location->id }}">{{ $location->name }}</option>
