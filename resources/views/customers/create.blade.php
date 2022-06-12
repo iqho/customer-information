@@ -4,9 +4,7 @@
 
 @push('styles')
 <style>
-    table,
-    tr,
-    td {
+    table, tr, td {
         border: 1px solid rgb(170, 170, 170);
         text-align: center;
         vertical-align: middle;
@@ -77,7 +75,9 @@
                                             </select>
                                         </td>
                                         <td><a class="btn btn-danger" v-on:click="removeCustomer(index)"><i
-                                                    class="fa-solid fa-minus"></i></a></td>
+                                                    class="fa-solid fa-minus"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="6">
@@ -158,7 +158,7 @@
                   if(e.code == '' || e.name == '' || e.age == '' || e.area_id == ''){
                     thisV.hasError[i] = 'border border-danger border-2';
                   }
-              });
+                });
 
                 const url = "{{ route('customers.store') }}";
                 const customers = JSON.stringify({customers:this.customers});
